@@ -9,15 +9,21 @@ import { ChooseQuestionBestAnswerUseCase } from './choose-question-best-answer'
 import { makeAnswer } from 'tests/factories/make-answer'
 import { an } from 'node_modules/@faker-js/faker/dist/airline-BcEu2nRk.cjs'
 import { NotAllowedError } from './errors/not-allowed-error'
+import { InMemoryAnswerAttachmentsRepository } from 'tests/repositories/in-memory-answer-attachments-repository'
+import { InMemoryQuestionAttachmentsRepository } from 'tests/repositories/in-memory-question-attachments-repository'
 
+let inMemoryAnswersAttachmentRepository: InMemoryAnswerAttachmentsRepository
+let inMemoryQuestionsAttachmentRepository: InMemoryQuestionAttachmentsRepository
 let inMemoryQuestionsRepository: InMemoryQuestionsRepository
 let inMemoryAnswersRepository: InMemoryAnswersRepository
 let sut: ChooseQuestionBestAnswerUseCase
 
 describe('Choose question best answer', () => {
   beforeEach(() => {
-    inMemoryQuestionsRepository = new InMemoryQuestionsRepository()
-    inMemoryAnswersRepository = new InMemoryAnswersRepository()
+    inMemoryQuestionsAttachmentRepository = new InMemoryQuestionAttachmentsRepository()
+    inMemoryAnswersAttachmentRepository = new InMemoryAnswerAttachmentsRepository()
+    inMemoryQuestionsRepository = new InMemoryQuestionsRepository(inMemoryQuestionsAttachmentRepository)
+    inMemoryAnswersRepository = new InMemoryAnswersRepository(inMemoryAnswersAttachmentRepository)
 
     sut = new ChooseQuestionBestAnswerUseCase(
       inMemoryQuestionsRepository,

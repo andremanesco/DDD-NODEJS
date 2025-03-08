@@ -3,14 +3,17 @@ import { makeAnswer } from '../../../../../tests/factories/make-answer'
 import { InMemoryAnswerCommentsRepository } from '../../../../../tests/repositories/in-memory-answer-comments-repository'
 import { CommentOnAnswerUseCase } from './comment-on-answer'
 import { beforeEach, describe, expect, it } from 'vitest'
+import { InMemoryAnswerAttachmentsRepository } from 'tests/repositories/in-memory-answer-attachments-repository'
 
+let inMemoryAnswersAttachmentRepository: InMemoryAnswerAttachmentsRepository
 let inMemoryAnswersRepository: InMemoryAnswersRepository
 let inMemoryAnswerCommentsRepository: InMemoryAnswerCommentsRepository
 let sut: CommentOnAnswerUseCase
 
 describe('Comment on Answer', () => {
   beforeEach(() => {
-    inMemoryAnswersRepository = new InMemoryAnswersRepository()
+    inMemoryAnswersAttachmentRepository = new InMemoryAnswerAttachmentsRepository()
+    inMemoryAnswersRepository = new InMemoryAnswersRepository(inMemoryAnswersAttachmentRepository)
     inMemoryAnswerCommentsRepository = new InMemoryAnswerCommentsRepository()
 
     sut = new CommentOnAnswerUseCase(
